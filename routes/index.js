@@ -12,6 +12,6 @@ const storeController = require('../controllers/store.controller');
 //   });
 // });
 
-router.get('/', storeController.homePage);
+router.get('/', storeController.myMiddleware, storeController.homePage);
 
 module.exports = router;
