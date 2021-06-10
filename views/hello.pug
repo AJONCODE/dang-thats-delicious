@@ -1,0 +1,22 @@
+extends layout
+
+//- block header
+//- 	h2 Yo!
+
+block content
+	.wrapper
+		p.hello Hello!
+		span#yo Yo!!
+
+
+	h2 HELLO!
+		em How are you?
+
+	h2
+		| Hey!
+		em Lemme tell you something
+
+	.wrapper
+		- const lowDog = dog.toLowerCase();
+		p.hello Mate! My dog's name is #{dog.toUpperCase()}:#{lowDog}
+		img.dog(src="dog.jpg" alt=`DOG ${dog}`)
