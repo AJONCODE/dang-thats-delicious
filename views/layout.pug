@@ -44,6 +44,7 @@ html
             each category in categories
               each message in flashes[category]
                 .flash(class=`flash--${category}`)
+                  //- != is coverting a text into html if any
                   p.flash__text!= message
                   button.flash__remove(onClick="this.parentElement.remove()") &times;
     .content

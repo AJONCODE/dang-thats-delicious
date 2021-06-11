@@ -19,8 +19,14 @@ exports.addStore = (req, res) => {
 };
 
 exports.createStore = async (req, res) => {
-	const store = new Store(req.body);
-	await store.save();
+	let store = new Store(req.body);
+	store = await store.save();
 
-	res.redirect('/');
+	// We flash it and then we render it out, i.e., these flashes only get sent on the next
+	// request, unless we explicitly passed them. Flashes only work if we use sessions, because
+	// the whole idea of sessions is that we can save data (that's why we can pass data from one
+	// request to another)
+	req.flash('success', `Successfully created <strong>${store.name}</strong>. Care to leave a review?`)
+
+	res.redirect(`/store/${store.slug}`);
 };
