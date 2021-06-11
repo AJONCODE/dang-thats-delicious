@@ -4,13 +4,13 @@ const mongoose = require('mongoose');
 // allows us to only import our models once and reference it anywhere in our application.
 const Store = mongoose.model('Store');
 
-exports.homePage = (req, res) => {
-	res.render('hello', {
-		title: 'I Love Food! ',
-		name: 'AJ',
-		dog: req.query.dog || 'MAX',
-	});
-};
+// exports.homePage = (req, res) => {
+// 	res.render('hello', {
+// 		title: 'I Love Food! ',
+// 		name: 'AJ',
+// 		dog: req.query.dog || 'MAX',
+// 	});
+// };
 
 exports.addStore = (req, res) => {
   res.render('editStore', {
@@ -29,4 +29,13 @@ exports.createStore = async (req, res) => {
 	req.flash('success', `Successfully created <strong>${store.name}</strong>. Care to leave a review?`)
 
 	res.redirect(`/store/${store.slug}`);
+};
+
+exports.getStores = async (req, res) => {
+	const stores = await Store.find();
+
+	res.render('stores', {
+		title: 'Stores',
+		stores,
+	})
 };
