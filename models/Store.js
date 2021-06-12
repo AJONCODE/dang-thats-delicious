@@ -13,6 +13,7 @@ const storeSchema = new mongoose.Schema({
 		type: String,
 		trim: true,
 	},
+	photo: String,
 	tags: [String],
 	created: {
 		type: Date,
