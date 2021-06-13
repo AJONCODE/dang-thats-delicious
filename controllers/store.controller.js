@@ -100,3 +100,14 @@ exports.updateStore = async (req, res) => {
 
 	res.redirect(`/stores/${store._id}/edit`);
 };
+
+exports.getStoreBySlug = async (req, res) => {
+	const store = await Store.findOne({ slug: req.params.slug });
+
+	if(!store) return next(); // Now app.use(errorHandlers.notFound) in app.js will kick in
+
+	res.render('store', {
+		title: store.name,
+		store,
+	});
+};
