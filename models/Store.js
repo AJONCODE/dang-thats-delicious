@@ -38,16 +38,22 @@ const storeSchema = new mongoose.Schema({
 });
 
 // Do not use arrow function, because we'll be needing this
-storeSchema.pre('save', function(next) {
+storeSchema.pre('save', async function(next) {
 	if (!this.isModified('name')) {
 		next(); // skip it
 		return; // stop this function from running
 	}
 
 	this.slug = slug(this.name);
-	next();
 
-	// TODO: make more resiliant so slugs are unique
+	// If slug already exists, then add order after it, i.e., bar, bar-2, and so on
+	const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
+	const storesWithSlug = await this.constructor.find({ slug: slugRegEx });
+	if (storesWithSlug.length) {
+		this.slug = `${this.slug}-${storesWithSlug.length + 1}`
+	}
+
+	next();
 })
 
 module.exports = mongoose.model('Store', storeSchema);
