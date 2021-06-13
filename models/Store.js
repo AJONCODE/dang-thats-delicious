@@ -37,7 +37,7 @@ const storeSchema = new mongoose.Schema({
 	},
 });
 
-// Do not use arrow function, because we'll be needing this
+// Do not use arrow function, because we'll be using this
 storeSchema.pre('save', async function(next) {
 	if (!this.isModified('name')) {
 		next(); // skip it
@@ -54,6 +54,15 @@ storeSchema.pre('save', async function(next) {
 	}
 
 	next();
-})
+});
+
+// Do not use arrow function, because we'll be using this
+storeSchema.statics.getTagsList = function() {
+	return this.aggregate([
+		{ $unwind: '$tags' },
+		{ $group: { _id: '$tags', count: { $sum: 1 } } },
+		{ $sort: { count: -1 } }, // descending order
+	]);
+}
 
 module.exports = mongoose.model('Store', storeSchema);
