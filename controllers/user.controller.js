@@ -1,4 +1,9 @@
 const mongoose = require('mongoose');
+// Because we have already imported the User model in start.js file. We can simply
+// reference it of the mongoose. Because mongoose use the concept of the Singleton, which
+// allows us to only import our models once and reference it anywhere in our application.
+const User = mongoose.model('User');
+const promisify = require('es6-promisify');
 
 exports.registerForm = (req, res) => {
 	res.render('register', {
@@ -31,6 +36,20 @@ exports.validateRegister = (req, res, next) => {
 	}
 
 	next(); // there were no errors!
+};
+
+exports.register = async (req, res, next) => {
+	const user = new User({
+		email: req.body.email,
+		name: req.body.name,
+	});
+
+	// Since the method is within an object, we need to pass the object as second argument
+	// User.register is available via passport-local-mongoose plugin in User
+	const register = promisify(User.register, User);
+	await register(user, req.body.password);
+
+	next(); // pass to authController.login
 };
 
 exports.loginForm = (req, res) => {

@@ -13,6 +13,9 @@ const routes = require('./routes/index');
 const helpers = require('./helpers');
 const errorHandlers = require('./handlers/errorHandlers');
 
+// initialize passport strategy
+require('./handlers/passport');
+
 // create our Express app
 const app = express();
 

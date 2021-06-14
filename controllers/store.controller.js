@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// Because we have already imported the Store model once in our start.js file. We can simply
+// Because we have already imported the Store model in start.js file. We can simply
 // reference it of the mongoose. Because mongoose use the concept of the Singleton, which
 // allows us to only import our models once and reference it anywhere in our application.
 const Store = mongoose.model('Store');
