@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const storeController = require('../controllers/store.controller');
+const userController = require('../controllers/user.controller');
 // catchErrors: will apply try-catch to our async controller functions
 const { catchErrors } = require('../handlers/errorHandlers');
 
@@ -31,5 +32,11 @@ router.get('/store/:slug', catchErrors(storeController.getStoreBySlug));
 router.get('/tags', catchErrors(storeController.getStoresByTag));
 
 router.get('/tags/:tag', catchErrors(storeController.getStoresByTag));
+
+router.get('/register', userController.registerForm);
+
+router.post('/register', userController.validateRegister);
+
+router.get('/login', userController.loginForm);
 
 module.exports = router;
