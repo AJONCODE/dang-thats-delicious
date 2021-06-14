@@ -10,7 +10,7 @@ router.get('/', catchErrors(storeController.getStores));
 
 router.get('/stores', catchErrors(storeController.getStores));
 
-router.get('/add', storeController.addStore);
+router.get('/add', authController.isLoggedIn, storeController.addStore);
 
 router.post(
   '/add',
@@ -44,5 +44,9 @@ router.post(
 );
 
 router.get('/login', userController.loginForm);
+
+router.post('/login', authController.login);
+
+router.get('/logout', authController.logout);
 
 module.exports = router;
