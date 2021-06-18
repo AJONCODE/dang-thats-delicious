@@ -49,6 +49,7 @@ exports.addStore = (req, res) => {
 
 exports.createStore = async (req, res) => {
 	let store = new Store(req.body);
+	store.author = req.user._id;
 	store = await store.save();
 
 	// We flash it and then we render it out, i.e., these flashes only get sent on the next
@@ -69,10 +70,16 @@ exports.getStores = async (req, res) => {
 	})
 };
 
+const confirmOwner = (store, user) => {
+	if (!store.author.equals(user._id)) {
+		throw Error('You must own a store in order to edit it!');
+	}
+};
+
 exports.editStore = async (req, res) => {
 	const store = await Store.findOne({ _id: req.params.id });
 
-	// TODO: Confirm they are the owner of the store
+	confirmOwner(store, req.user);
 
 	res.render('editStore', {
 		title: `Edit ${store.name}`,
@@ -101,8 +108,9 @@ exports.updateStore = async (req, res) => {
 	res.redirect(`/stores/${store._id}/edit`);
 };
 
-exports.getStoreBySlug = async (req, res) => {
-	const store = await Store.findOne({ slug: req.params.slug });
+exports.getStoreBySlug = async (req, res, next) => {
+	const store = await Store.findOne({ slug: req.params.slug }).populate('author');
+	console.info('store', store);
 
 	if(!store) return next(); // Now app.use(errorHandlers.notFound) in app.js will kick in
 

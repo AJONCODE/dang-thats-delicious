@@ -35,6 +35,11 @@ const storeSchema = new mongoose.Schema({
 			required: 'You must supply an address!',
 		},
 	},
+	author: {
+		type: mongoose.Schema.ObjectId,
+		ref: 'User',
+		required: 'You must supply an author!',
+	},
 });
 
 // Do not use arrow function, because we'll be using this
