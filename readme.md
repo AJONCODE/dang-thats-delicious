@@ -20,6 +20,6 @@ That will populate 16 stores with 3 authors and 41 reviews. The logins for the a
 
 | Name          | Email (login)        | Password |
 | ------------- | -------------------- | -------- |
-| AJONCODE      | ajoncode@example.com | ajoncode |
+| AJONCODE      | ajoncode@example.com | wes      |
 | Debbie Downer | debbie@example.com   | debbie   |
 | Beau          | beau@example.com     | beau     |
