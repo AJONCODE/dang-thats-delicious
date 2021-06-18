@@ -42,6 +42,12 @@ const storeSchema = new mongoose.Schema({
 	},
 });
 
+// Define our indexes
+storeSchema.index({
+	name: 'text',
+	description: 'text',
+});
+
 // Do not use arrow function, because we'll be using this
 storeSchema.pre('save', async function(next) {
 	if (!this.isModified('name')) {

@@ -139,3 +139,33 @@ exports.getStoresByTag = async (req, res) => {
 		}
 	);
 };
+
+exports.searchStores = async (req, res) => {
+	/**
+	 * $text: performs a text search on the content of the fields indexed with a text index
+	 * $meta: projection operator returns for each matching document the metadata
+	 * textScore: returns the score associated with the corresponding $text query for each matching document
+	 */
+
+	const stores = await Store
+	// find stores that match
+	.find({
+		$text: {
+			$search: req.query.q,
+		}
+	}, {
+		score: {
+			$meta: 'textScore',
+		}
+	})
+	// sort them
+	.sort({
+		score: {
+			$meta: 'textScore', // desc sorting order
+		}
+	})
+	// limit to only 5 results
+	.limit(5);
+
+	res.json(stores);
+};
