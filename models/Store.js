@@ -48,6 +48,10 @@ storeSchema.index({
 	description: 'text',
 });
 
+storeSchema.index({
+	location: '2dsphere',
+});
+
 // Do not use arrow function, because we'll be using this
 storeSchema.pre('save', async function(next) {
 	if (!this.isModified('name')) {
