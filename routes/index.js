@@ -67,6 +67,8 @@ router.post(
   catchErrors(authController.updatePassword)
 );
 
+router.get('/map', storeController.mapPage);
+
 /**
  * API
  */
