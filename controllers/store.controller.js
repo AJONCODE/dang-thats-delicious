@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 // reference it of the mongoose. Because mongoose use the concept of the Singleton, which
 // allows us to only import our models once and reference it anywhere in our application.
 const Store = mongoose.model('Store');
+const User = mongoose.model('User');
 const multer = require('multer');
 const jimp = require('jimp');
 const uuid = require('uuid');
@@ -193,4 +194,24 @@ exports.mapPage = (req, res) => {
 	res.render('map', {
 		title: 'Map',
 	});
+};
+
+exports.heartStore = async (req, res) => {
+	const hearts = req.user.hearts.map(heartObj => heartObj.toString());
+	const storeID = req.params.id;
+
+	const operator = hearts.includes(storeID) ? '$pull' : '$addToSet';
+	const user = await User.findByIdAndUpdate(
+		req.user._id,
+		{
+			[operator]: {
+				hearts: storeID
+			},
+		},
+		{
+			new: true,
+		},
+	);
+
+	res.json(user);
 };

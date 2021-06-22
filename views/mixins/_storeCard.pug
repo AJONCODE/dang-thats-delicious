@@ -2,10 +2,18 @@ mixin storeCard(store = {})
   .store
     .store__hero
       .store__actions
+        if user
+          .store__action.store__action--heart
+            form.heart(method="POST" action=`/api/stores/${store._id}/heart`)
+              //-  character '-' indicates that we are writing javascript
+              - const heartStrings = user.hearts.map(heartObj => heartObj.toString())
+              - const heartClass = heartStrings.includes(store._id.toString()) ? 'heart__button--hearted' : ''
+              button.heart__button(type="submit" name="heart" class=heartClass)
+                //-  != indicates that we are writing html
+                != h.icon('heart')
         if user && store.author.equals(user._id)
           .store__action.store__action--edit
             a(href=`/stores/${store._id}/edit`)
-              //-  != indicates that we are writing html
               != h.icon("pencil")
       img(src=`/uploads/${store.photo || "store.png"}`)
       h2.title
