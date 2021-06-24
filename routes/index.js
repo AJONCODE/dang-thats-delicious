@@ -3,6 +3,7 @@ const router = express.Router();
 const storeController = require('../controllers/store.controller');
 const userController = require('../controllers/user.controller');
 const authController = require('../controllers/auth.controller');
+const reviewController = require('../controllers/review.controller');
 // catchErrors: will apply try-catch to our async controller functions
 const { catchErrors } = require('../handlers/errorHandlers');
 
@@ -73,6 +74,12 @@ router.get(
   '/hearts',
   authController.isLoggedIn,
   catchErrors(storeController.getHearts)
+);
+
+router.post(
+  '/reviews/:id',
+  authController.isLoggedIn,
+  catchErrors(reviewController.addReview)
 );
 
 /**

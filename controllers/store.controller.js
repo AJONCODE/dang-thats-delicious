@@ -111,7 +111,6 @@ exports.updateStore = async (req, res) => {
 
 exports.getStoreBySlug = async (req, res, next) => {
 	const store = await Store.findOne({ slug: req.params.slug }).populate('author');
-	console.info('store', store);
 
 	if(!store) return next(); // Now app.use(errorHandlers.notFound) in app.js will kick in
 
