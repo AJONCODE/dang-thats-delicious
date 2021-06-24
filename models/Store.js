@@ -39,7 +39,11 @@ const storeSchema = new mongoose.Schema({
 		type: mongoose.Schema.ObjectId,
 		ref: 'User',
 		required: 'You must supply an author!',
-	},
+	}
+}, {
+	// by default virtual fields do not go either into object or JSON unless we explicitly ask it to
+	toJSON: { virtuals: true },
+	toObject: { virtuals: true },
 });
 
 // Define our indexes
@@ -79,5 +83,19 @@ storeSchema.statics.getTagsList = function() {
 		{ $sort: { count: -1 } }, // descending order
 	]);
 }
+
+/**
+ * Virtual Populate
+ * field (localField) on our model needs to match-up with field (foreignField) on foreign model
+ *
+ * find reviews where the stores _id === reviews store property
+ *
+ * by default virtual fields do not go either into object or JSON unless we explicitly ask it to
+ */
+storeSchema.virtual('reviews', {
+	ref: 'Review', // what model to link?
+	localField: '_id', // which field on the store?
+	foreignField: 'store', // which field on the review?
+});
 
 module.exports = mongoose.model('Store', storeSchema);

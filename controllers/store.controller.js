@@ -110,7 +110,11 @@ exports.updateStore = async (req, res) => {
 };
 
 exports.getStoreBySlug = async (req, res, next) => {
-	const store = await Store.findOne({ slug: req.params.slug }).populate('author');
+
+	// reviews is virtual field
+	const store = await Store
+		.findOne({ slug: req.params.slug })
+		.populate('author reviews');
 
 	if(!store) return next(); // Now app.use(errorHandlers.notFound) in app.js will kick in
 

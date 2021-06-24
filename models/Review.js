@@ -27,4 +27,17 @@ const reviewSchema = new mongoose.Schema({
   },
 });
 
+function autopopulate(next) {
+  this.populate('author');
+
+  next();
+}
+
+/**
+ * Any time find or findOne (including virtual populate foreign field) query is hit,
+ * autopopulate function will execute automatically
+ */
+reviewSchema.pre('find', autopopulate);
+reviewSchema.pre('findOne', autopopulate);
+
 module.exports = mongoose.model('Review', reviewSchema);
