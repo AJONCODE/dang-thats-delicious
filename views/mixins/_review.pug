@@ -5,7 +5,7 @@ mixin review(reviewObj)
       p= reviewObj.author.name
     .review__stars(title=`Rated ${reviewObj.rating} out of 5 stars`)
       = `⭐`.repeat(reviewObj.rating)
-      = `⭐`.repeat(5 - reviewObj.rating)
+      span.review__hollow--stars= `✰`.repeat(5 - reviewObj.rating)
     time.review__time(datetime=reviewObj.created)= h.moment(reviewObj.created).fromNow()
   .review__body
     p #{reviewObj.text}

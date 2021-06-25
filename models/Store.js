@@ -75,6 +75,19 @@ storeSchema.pre('save', async function(next) {
 	next();
 });
 
+function autopopulate(next) {
+  this.populate('reviews');
+
+  next();
+}
+
+/**
+ * Any time find or findOne (including virtual populate foreign field) query is hit,
+ * autopopulate function will execute automatically
+ */
+ storeSchema.pre('find', autopopulate);
+ storeSchema.pre('findOne', autopopulate);
+
 // Do not use arrow function, because we'll be using this
 storeSchema.statics.getTagsList = function() {
 	return this.aggregate([
@@ -82,7 +95,57 @@ storeSchema.statics.getTagsList = function() {
 		{ $group: { _id: '$tags', count: { $sum: 1 } } },
 		{ $sort: { count: -1 } }, // descending order
 	]);
-}
+};
+
+/**
+ * (Do not use arrow function, because we'll be using this)
+ * (We can't actually use our virtual populate (virtual populate of reviews) here, because
+ * virtual populate a mongoose specific thing and aggregate is not mongoose specific)
+ */
+storeSchema.statics.getTopStores = function() {
+	return this.aggregate([
+		// lookup stores and populate their reviews
+		{
+			$lookup: {
+				from: 'reviews', // mongodb model name
+				localField: '_id',
+				foreignField: 'store',
+				as: 'reviews',
+			},
+		},
+		// filter for only items that have 2 or more reviews
+		// (match only if element exists in reviews array at index 1)
+		{
+			$match: {
+				'reviews.1': {
+					$exists: true,
+				},
+			},
+		},
+		// add the average reviews field
+		{
+			$project: {
+				photo: '$$ROOT.photo', // root level field 'photo'
+				name: '$$ROOT.name', // root level field 'name'
+				slug: '$$ROOT.slug', // root level field 'slug'
+				reviews: '$$ROOT.reviews', // root level field 'reviews'
+				averageRating: {
+					$avg: '$reviews.rating', // field 'rating' inside 'reviews' object (field)
+				},
+			},
+		},
+		// sort it by our new field, highest reviews first
+		{
+			$sort: {
+				averageRating: -1, // descending order (i.e., -1)
+			},
+		},
+		// limit to at most 10
+		{
+			$limit: 10,
+		},
+	]);
+};
 
 /**
  * Virtual Populate

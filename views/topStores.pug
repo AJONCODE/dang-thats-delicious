@@ -1,0 +1,8 @@
+extends layout
+
+include mixins/_topStoresTable
+
+block content
+  .inner
+    h2 Top #{stores.length} Stores
+    +topStoresTable(stores)
