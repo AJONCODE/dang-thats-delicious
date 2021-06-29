@@ -23,3 +23,17 @@ That will populate 16 stores with 3 authors and 41 reviews. The logins for the a
 | AJONCODE      | ajoncode@example.com | wes      |
 | Debbie Downer | debbie@example.com   | debbie   |
 | Beau          | beau@example.com     | beau     |
+
+## variables.env
+```
+NODE_ENV=development or production
+DATABASE=mongodb://127.0.0.1:27017/databaseName
+MAIL_USER=USERNAME
+MAIL_PASS=PASSWORD
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+PORT=7777
+MAP_KEY=GOOGLE_MAP_KEY
+SECRET=RANDOM_SECRET
+KEY=RANDOM_KEY
+```
